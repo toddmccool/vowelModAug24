@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vocal Vowel Modification</title>
+    <style>
+      .highlight-blue {
+        background-color: lightblue;
+      }
+      .highlight-yellow {
+        background-color: yellow;
+      }
+      #lyrics {
+        white-space: pre-wrap;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+        text-align: center;
+      }
+      .modal-content button {
+        margin: 5px;
+        padding: 10px 20px;
+        font-size: 18px;
+      }
+      .highlight-button-blue {
+        background-color: lightblue;
+      }
+      .highlight-button-yellow {
+        background-color: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Vocal Vowel Modification Application</h1>
+    <textarea
+      id="inputLyrics"
+      rows="10"
+      cols="50"
+      placeholder="type or Paste your lyrics here..."
+    ></textarea
+    ><br />
+    <button onclick="submitLyrics()">Submit</button>
+    <div id="lyrics"></div>
+    <button onclick="askLoudOrQuiet()">Apply Loud/Quiet</button>
+    <button onclick="copyText()">Copy Text</button>
+
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <p>Choose:</p>
+        <button class="highlight-button-blue" onclick="setHighlight('b')">
+          B <br /><small>(ee, ay, ih, eh, ae, ow)</small>
+        </button>
+        <button class="highlight-button-yellow" onclick="setHighlight('f')">
+          F <br /><small>(oo, oh, oe, uh, ah, i [eye])</small>
+        </button>
+        <button onclick="setHighlight('z')">
+          Z <br /><small>(undo)</small>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let selectedWordSpan = null;
+
+      function submitLyrics() {
+        const input = document.getElementById("inputLyrics").value;
+        const words = input.split(/\s+/);
+        const lyricsDiv = document.getElementById("lyrics");
+        lyricsDiv.innerHTML = "";
+
+        words.forEach((word) => {
+          const wordSpan = document.createElement("span");
+          wordSpan.textContent = word + " ";
+          wordSpan.onclick = () => showModal(wordSpan);
+          lyricsDiv.appendChild(wordSpan);
+        });
+      }
+
+      function showModal(wordSpan) {
+        selectedWordSpan = wordSpan;
+        document.getElementById("myModal").style.display = "block";
+      }
+
+      function setHighlight(choice) {
+        if (selectedWordSpan) {
+          switch (choice) {
+            case "b":
+              selectedWordSpan.className = "highlight-blue";
+              break;
+            case "f":
+              selectedWordSpan.className = "highlight-yellow";
+              break;
+            case "z":
+              selectedWordSpan.className = "";
+              break;
+          }
+        }
+        document.getElementById("myModal").style.display = "none";
+      }
+
+      function askLoudOrQuiet() {
+        const choice = prompt(
+          "Choose: L for louder, Q for quieter"
+        ).toLowerCase();
+        if (choice === "l" || choice === "q") {
+          applyLoudOrQuiet(choice);
+        } else {
+          alert("Invalid choice");
+        }
+      }
+
+      function applyLoudOrQuiet(choice) {
+        const words = document
+          .getElementById("lyrics")
+          .querySelectorAll("span");
+        words.forEach((wordSpan) => {
+          if (wordSpan.classList.contains("highlight-blue")) {
+            modifyVowel(wordSpan, choice === "l" ? "ah" : "oo");
+          } else if (wordSpan.classList.contains("highlight-yellow")) {
+            modifyVowel(wordSpan, choice === "l" ? "ae" : "ee");
+          }
+        });
+      }
+
+      function modifyVowel(wordSpan, newVowel) {
+        const word = wordSpan.textContent.trim();
+        const vowels = "aeiou";
+        for (let i = 0; i < word.length; i++) {
+          if (vowels.includes(word[i].toLowerCase())) {
+            const modifiedWord =
+              word.slice(0, i) + newVowel + word.slice(i + 1);
+            wordSpan.textContent = modifiedWord + " ";
+            break;
+          }
+        }
+      }
+
+      function copyText() {
+        const range = document.createRange();
+        range.selectNode(document.getElementById("lyrics"));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        alert("Text copied to clipboard");
+      }
+
+      window.onclick = function (event) {
+        const modal = document.getElementById("myModal");
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    </script>
+  </body>
+</html>
