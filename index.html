@@ -52,6 +52,10 @@
       .highlight-button-quiet {
         background-color: lightblue;
       }
+      #instruction {
+        font-style: italic;
+        margin-bottom: 20px; /* Add margin to create space */
+      }
     </style>
   </head>
   <body>
@@ -60,17 +64,20 @@
       id="inputLyrics"
       rows="10"
       cols="50"
-      placeholder="Paste your lyrics here..."
+      placeholder="type or Paste your lyrics here..."
     ></textarea
     ><br />
     <button onclick="submitLyrics()">Submit</button>
+    <div id="instruction"></div>
     <div id="lyrics"></div>
+    <br />
+    <!-- Blank line between returned words and buttons -->
     <button onclick="showLoudQuietModal()">Apply Loud/Quiet</button>
     <button onclick="copyText()">Copy Text</button>
 
     <div id="myModal" class="modal">
       <div class="modal-content">
-        <p>Choose:</p>
+        <p>what does the vowel in this word sound like?</p>
         <button class="highlight-button-blue" onclick="setHighlight('b')">
           B <br /><small>(ee, ay, ih, eh, ae, ow)</small>
         </button>
@@ -85,16 +92,12 @@
 
     <div id="loudQuietModal" class="modal">
       <div class="modal-content">
-        <p>Choose:</p>
+        <p>Choose what you want to be:</p>
         <button class="highlight-button-loud" onclick="setLoudOrQuiet('l')">
-          L <br /><small
-            >(i need to be Louder - my voice is naturally weak)</small
-          >
+          L <br /><small>(Louder)</small>
         </button>
         <button class="highlight-button-quiet" onclick="setLoudOrQuiet('q')">
-          Q <br /><small
-            >(i need to be Quieter - my voice is naturally strained !!!)</small
-          >
+          Q <br /><small>(Quieter)</small>
         </button>
       </div>
     </div>
@@ -114,6 +117,9 @@
           wordSpan.onclick = () => showModal(wordSpan);
           lyricsDiv.appendChild(wordSpan);
         });
+
+        document.getElementById("instruction").textContent =
+          "Click on the problem words";
       }
 
       function showModal(wordSpan) {
