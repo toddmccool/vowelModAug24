@@ -45,6 +45,13 @@
       .highlight-button-yellow {
         background-color: yellow;
       }
+      .highlight-button-loud {
+        background-color: red;
+        color: white;
+      }
+      .highlight-button-quiet {
+        background-color: lightblue;
+      }
     </style>
   </head>
   <body>
@@ -53,12 +60,12 @@
       id="inputLyrics"
       rows="10"
       cols="50"
-      placeholder="type or Paste your lyrics here..."
+      placeholder="Paste your lyrics here..."
     ></textarea
     ><br />
     <button onclick="submitLyrics()">Submit</button>
     <div id="lyrics"></div>
-    <button onclick="askLoudOrQuiet()">Apply Loud/Quiet</button>
+    <button onclick="showLoudQuietModal()">Apply Loud/Quiet</button>
     <button onclick="copyText()">Copy Text</button>
 
     <div id="myModal" class="modal">
@@ -72,6 +79,22 @@
         </button>
         <button onclick="setHighlight('z')">
           Z <br /><small>(undo)</small>
+        </button>
+      </div>
+    </div>
+
+    <div id="loudQuietModal" class="modal">
+      <div class="modal-content">
+        <p>Choose:</p>
+        <button class="highlight-button-loud" onclick="setLoudOrQuiet('l')">
+          L <br /><small
+            >(i need to be Louder - my voice is naturally weak)</small
+          >
+        </button>
+        <button class="highlight-button-quiet" onclick="setLoudOrQuiet('q')">
+          Q <br /><small
+            >(i need to be Quieter - my voice is naturally strained !!!)</small
+          >
         </button>
       </div>
     </div>
@@ -115,15 +138,13 @@
         document.getElementById("myModal").style.display = "none";
       }
 
-      function askLoudOrQuiet() {
-        const choice = prompt(
-          "Choose: L for louder (if you're voice is weak intially), Q for quieter (if you're straining  initially)"
-        ).toLowerCase();
-        if (choice === "l" || choice === "q") {
-          applyLoudOrQuiet(choice);
-        } else {
-          alert("Invalid choice");
-        }
+      function showLoudQuietModal() {
+        document.getElementById("loudQuietModal").style.display = "block";
+      }
+
+      function setLoudOrQuiet(choice) {
+        applyLoudOrQuiet(choice);
+        document.getElementById("loudQuietModal").style.display = "none";
       }
 
       function applyLoudOrQuiet(choice) {
@@ -163,8 +184,11 @@
 
       window.onclick = function (event) {
         const modal = document.getElementById("myModal");
+        const loudQuietModal = document.getElementById("loudQuietModal");
         if (event.target == modal) {
           modal.style.display = "none";
+        } else if (event.target == loudQuietModal) {
+          loudQuietModal.style.display = "none";
         }
       };
     </script>
