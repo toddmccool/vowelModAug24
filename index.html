@@ -117,7 +117,7 @@
 
       function askLoudOrQuiet() {
         const choice = prompt(
-          "Choose: L for louder, Q for quieter"
+          "Choose: L for louder (if you're voice is weak intially), Q for quieter (if you're straining  initially)"
         ).toLowerCase();
         if (choice === "l" || choice === "q") {
           applyLoudOrQuiet(choice);
