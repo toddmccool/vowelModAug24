@@ -163,20 +163,42 @@
           } else if (wordSpan.classList.contains("highlight-yellow")) {
             modifyVowel(wordSpan, choice === "l" ? "ae" : "ee");
           }
+          modifyConsonants(wordSpan);
         });
       }
 
       function modifyVowel(wordSpan, newVowel) {
-        const word = wordSpan.textContent.trim();
+        let word = wordSpan.textContent.trim();
         const vowels = "aeiou";
         for (let i = 0; i < word.length; i++) {
           if (vowels.includes(word[i].toLowerCase())) {
-            const modifiedWord =
-              word.slice(0, i) + newVowel + word.slice(i + 1);
-            wordSpan.textContent = modifiedWord + " ";
+            word = word.slice(0, i) + newVowel + word.slice(i + 1);
             break;
           }
         }
+        wordSpan.textContent = word + " ";
+      }
+
+      function modifyConsonants(wordSpan) {
+        let word = wordSpan.textContent.trim();
+        const consonantMap = {
+          s: "z",
+          t: "d",
+          f: "v",
+          p: "b",
+          k: "g",
+        };
+        word = word
+          .split("")
+          .map((char) =>
+            consonantMap[char.toLowerCase()] !== undefined
+              ? char === char.toUpperCase()
+                ? consonantMap[char.toLowerCase()].toUpperCase()
+                : consonantMap[char.toLowerCase()]
+              : char
+          )
+          .join("");
+        wordSpan.textContent = word + " ";
       }
 
       function copyText() {
